@@ -3,7 +3,11 @@ string output_file;
 
 void showHelp()
 {
-    stdout.printf("Help");
+    stdout.printf("Usage: vtest <file> [--output <output_file>] [-v]\n\n");
+    stdout.printf("  file:  \t\tfile to test (./ will be added automaticaly)\n");
+    stdout.printf("--output\t\tspecify output file\n");
+    stdout.printf("  output_file:  \tfile to write default: unit.xml\n");
+    stdout.printf("-v\t\t\tverbose output (not implemented yet)\n");
 }
 
 void initDefaults()
