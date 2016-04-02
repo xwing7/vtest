@@ -1,26 +1,62 @@
+bool verbose;
+string output_file;
+
+void showHelp()
+{
+    stdout.printf("Help");
+}
+
+void initDefaults()
+{
+    verbose = false;
+    output_file = "unit.xml";
+}
+
 void main (string[] args) {
+    
+    if(args.length < 2)
+    {
+        showHelp();
+        return;
+    }
+    
+    initDefaults();
+    
+    for(int i = 0; i < args.length; i++)
+    {
+        if(args[i].index_of("-") == 0)
+        {
+            if(args[i].index_of("-v") == 0)
+            {
+                verbose = true;
+            }
+            else if(args[i].index_of("--output") == 0)
+            {
+                if(args.length > i+1)
+                {
+                    output_file = args[i+1];
+                }
+            }
+        }
+    }
     
     string cmd = "./";
     cmd += args[1];
     
-    string output;
+    string process_output;
     
     try{
-        Process.spawn_command_line_sync(cmd, out output);
+        Process.spawn_command_line_sync(cmd, out process_output);
     } catch (SpawnError e) {
         stdout.printf("error: %s\n", e.message);
         return;
     }
     stdout.printf("output:\n");
-    stdout.printf(output);
+    stdout.printf("==========\n");
+    stdout.printf(process_output);
+    stdout.printf("==========\n");
     
-    string outputName = args[2];
-    if(outputName == "")
-    {
-        outputName = "unit.xml";
-    }
-    
-    string[] tests = output.split("\n");
+    string[] tests = process_output.split("\n");
     
     var testStrings = new List<string>();
     
@@ -39,7 +75,7 @@ void main (string[] args) {
         }
     }
     
-    var writer = new Xml.TextWriter.filename(outputName);
+    var writer = new Xml.TextWriter.filename(output_file);
     writer.set_indent(true);
     writer.set_indent_string("\t");
     
