@@ -12,7 +12,7 @@ set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
 # what to call that directory where we install data too
 set (PKGDATADIR "${DATADIR}/vtest")
-
+set (DEPS_NAME "libxml-2.0" )
 set (EXEC_NAME "vtest")
 
 file(GLOB SRC RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -25,7 +25,7 @@ MESSAGE (STATUS "SRC: " ${SRC})
 find_package(PkgConfig)
 
 # now let's actually check for the required dependencies
-pkg_check_modules(DEPS REQUIRED gtk+-3.0 libxml-2.0)
+pkg_check_modules(DEPS REQUIRED  $(DEPS_NAME))
 
 add_definitions(${DEPS_CFLAGS})
 link_libraries(${DEPS_LIBRARIES})
@@ -36,7 +36,7 @@ find_package(Vala REQUIRED)
 # make sure we use vala
 include(ValaVersion)
 # make sure it's the desired version of vala
-ensure_vala_version("0.16" MINIMUM)
+ensure_vala_version("0.28" MINIMUM)
 
 # files we want to compile
 include(ValaPrecompile)
@@ -45,8 +45,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
 
 # tell what libraries to use when compiling
 PACKAGES
-    gtk+-3.0
-    libxml-2.0
+    $(DEPS_NAME)
 )
 
 # tell cmake what to call the executable we just made
